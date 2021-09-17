@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs')
 const { UserInputError, AuthenticationError } = require('apollo-server')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
+const axios = require('axios').default;
 
 const { Message, User } = require('../../models')
 
@@ -36,30 +37,44 @@ module.exports = {
           throw new UserInputError('bad input', { errors })
         }
 
-        const user = await User.findOne({
-          where: { username },
-        })
 
-        if (!user) {
-          errors.username = 'User not found'
-          throw new UserInputError('User not found', { errors })
-        }
+        console.log(username)
+       return  axios.post("http://localhost:5000/api/users/login", {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json;charset=UTF-8'
+          },
+          username : username,
+          password : password
 
-        const correctPassword = await bcrypt.compare(password, user.password)
+      }).then(res => res.data.result);
 
-        if (!correctPassword) {
-          errors.password = 'Password is incorrect'
-          throw new UserInputError('Password is incorrect', { errors })
-        }
 
-        const token = jwt.sign({ username }, process.env.JWT_SECRET, {
-          expiresIn: 60 * 60,
-        })
+        // const user = await User.findOne({
+        //   where: { username },
+        // })
 
-        return {
-          ...user.toJSON(),
-          token,
-        }
+        // if (!user) {
+        //   errors.username = 'User not found'
+        //   throw new UserInputError('User not found', { errors })
+        // }
+
+        // const correctPassword = await bcrypt.compare(password, user.password)
+
+        // if (!correctPassword) {
+        //   errors.password = 'Password is incorrect'
+        //   throw new UserInputError('Password is incorrect', { errors })
+        // }
+
+        // const token = jwt.sign({ username }, process.env.JWT_SECRET, {
+        //   expiresIn: 60 * 60,
+        // })
+
+        // return {
+        //   ...user.toJSON(),
+        //   token,
+        // }
       } catch (err) {
         console.log(err)
         throw err
@@ -75,7 +90,7 @@ module.exports = {
         // Validate input data
         if (user_email.trim() === '') errors.user_email = 'Email must not be empty'
         if (username.trim() === '')
-           errors.username = 'Esername must not be empty'
+           errors.username = 'Username must not be empty'
        
          if (password.trim() === '')
           errors.password = 'Password must not be empty'
@@ -84,7 +99,7 @@ module.exports = {
           errors.user_firstname = 'User firstname must not be empty'
 
           if (user_lastname.trim() === '')
-           errors.user_lastname = 'User lastname must not be empty'
+             errors.user_lastname = 'User lastname must not be empty'
 
         // if (password !== confirmPassword)
         //   errors.confirmPassword = 'passwords must match'
@@ -97,23 +112,39 @@ module.exports = {
         // if (userByEmail) errors.email = 'Email is taken'
 
         if (Object.keys(errors).length > 0) {
-          throw errors
+             throw errors
         }
+        // console.log("hyeyeyeye");
 
         // Hash password
-        password = await bcrypt.hash(password, 6)
+        // password = await bcrypt.hash(password, 6)
 
-        // Create user
-        const user = await User.create({
-          username,
-          user_email,
-          user_firstname,
-          user_lastname,
-          password,
-        })
+        // // Create user
+        // const user = await User.create({
+        //   username,
+        //   user_email,
+        //   user_firstname,
+        //   user_lastname,
+        //   password,
+        // })
 
-        // Return user
-        return user
+        // // Return user
+        // return user
+
+         return axios.post("http://localhost:5000/api/users/regsiter", {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json;charset=UTF-8'
+          },
+          user_firstname : user_firstname,
+          user_lastname : user_lastname,
+          user_email : user_email,
+          username : username,
+          password : password
+          
+      }).then(res => res.data.result);
+
       } catch (err) {
         console.log(err)
         if (err.name === 'SequelizeUniqueConstraintError') {
