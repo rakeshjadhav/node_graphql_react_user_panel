@@ -28,8 +28,9 @@ module.exports = {
 
       try {
         if (username.trim() === '')
-          errors.username = 'username must not be empty'
-        if (password === '') errors.password = 'password must not be empty'
+          errors.username = 'Username must not be empty'
+
+        if (password === '') errors.password = 'Password must not be empty'
 
         if (Object.keys(errors).length > 0) {
           throw new UserInputError('bad input', { errors })
@@ -40,15 +41,15 @@ module.exports = {
         })
 
         if (!user) {
-          errors.username = 'user not found'
-          throw new UserInputError('user not found', { errors })
+          errors.username = 'User not found'
+          throw new UserInputError('User not found', { errors })
         }
 
         const correctPassword = await bcrypt.compare(password, user.password)
 
         if (!correctPassword) {
-          errors.password = 'password is incorrect'
-          throw new UserInputError('password is incorrect', { errors })
+          errors.password = 'Password is incorrect'
+          throw new UserInputError('Password is incorrect', { errors })
         }
 
         const token = jwt.sign({ username }, process.env.JWT_SECRET, {
@@ -72,18 +73,18 @@ module.exports = {
 
       try {
         // Validate input data
-        if (user_email.trim() === '') errors.user_email = 'email must not be empty'
+        if (user_email.trim() === '') errors.user_email = 'Email must not be empty'
         if (username.trim() === '')
-           errors.username = 'username must not be empty'
+           errors.username = 'Esername must not be empty'
        
          if (password.trim() === '')
-          errors.password = 'password must not be empty'
+          errors.password = 'Password must not be empty'
        
           if (user_firstname.trim() === '')
-          errors.user_firstname = 'user firstname must not be empty'
+          errors.user_firstname = 'User firstname must not be empty'
 
           if (user_lastname.trim() === '')
-           errors.user_lastname = 'user lastname must not be empty'
+           errors.user_lastname = 'User lastname must not be empty'
 
         // if (password !== confirmPassword)
         //   errors.confirmPassword = 'passwords must match'
