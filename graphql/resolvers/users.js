@@ -16,21 +16,6 @@ module.exports = {
           where: { username: { [Op.ne]: user.username } },
         })
 
-        // const allUserMessages = await Message.findAll({
-        //   where: {
-        //     [Op.or]: [{ from: user.username }, { to: user.username }],
-        //   },
-        //   order: [['createdAt', 'DESC']],
-        // })
-
-        // users = users.map((otherUser) => {
-        //   const latestMessage = allUserMessages.find(
-        //     (m) => m.from === otherUser.username || m.to === otherUser.username
-        //   )
-        //   otherUser.latestMessage = latestMessage
-        //   return otherUser
-        // })
-
         return users
       } catch (err) {
         console.log(err)
