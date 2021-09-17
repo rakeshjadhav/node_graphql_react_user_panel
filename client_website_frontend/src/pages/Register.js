@@ -37,6 +37,8 @@ export default function Register(props) {
   })
   const [errors, setErrors] = useState({})
 
+  console.log('erroree');
+  console.log(errors);
   const [registerUser, { loading }] = useMutation(REGISTER_USER, {
     update: (_, __) => props.history.push('/login'),
     onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors),
@@ -53,6 +55,7 @@ export default function Register(props) {
       <h1 className="text-center">Register</h1>
           <Row className="mb-3" style={{marginRight: "-0x",marginLeft: '0px'}}>
             <Form.Group as={Col} controlId="formGridEmail">
+              
             <Form.Label className={errors.user_firstname && 'text-danger'}>{errors.user_firstname ?? 'User firstname'}</Form.Label>
                     
                     <Form.Control  type="text"  value={variables.user_firstname} className={errors.user_firstname && 'is-invalid'}

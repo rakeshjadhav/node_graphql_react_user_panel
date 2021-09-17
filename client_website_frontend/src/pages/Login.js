@@ -25,6 +25,12 @@ export default function Register(props) {
   })
   const [errors, setErrors] = useState({})
 
+  console.log('erroree');
+  console.log(errors);
+  // if (errors == 'undefined') {
+  //     const [errors, setErrors] = useState('')
+  // }
+
   const dispatch = useAuthDispatch()
 
   const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, {
